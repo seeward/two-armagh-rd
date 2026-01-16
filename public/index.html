@@ -152,6 +152,7 @@
         margin-bottom: 12px;
       }
 
+      .sidebar-link,
       .sidebar-wp-btn {
         display: block;
         width: 100%;
@@ -166,9 +167,11 @@
         cursor: pointer;
         transition: all 0.2s ease;
       }
+      .sidebar-link:hover,
       .sidebar-wp-btn:hover {
         background: rgba(255, 255, 255, 0.1);
       }
+      .sidebar-link.active,
       .sidebar-wp-btn.active {
         background: rgba(59, 130, 246, 0.3);
         color: #60a5fa;
@@ -215,6 +218,105 @@
       a,
       a:visited {
         color: #9ad;
+      }
+
+      /* Start Screen */
+      #start-screen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.2), transparent 55%), radial-gradient(circle at 80% 30%, rgba(148, 163, 184, 0.12), transparent 50%), rgba(10, 10, 10, 0.92);
+        z-index: 400;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      #start-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .start-card {
+        width: min(420px, calc(100vw - 40px));
+        padding: 28px;
+        border-radius: 18px;
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .start-kicker {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .start-title {
+        margin-top: 6px;
+        color: #fff;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      .start-subtitle {
+        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 13px;
+      }
+      .start-actions {
+        margin-top: 20px;
+        display: grid;
+        gap: 12px;
+      }
+      .start-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        cursor: pointer;
+        text-align: left;
+        transition: transform 0.15s ease, border 0.2s ease, background 0.2s ease;
+      }
+      .start-btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .start-btn.primary {
+        border-color: rgba(59, 130, 246, 0.6);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0.05));
+      }
+      .start-btn.primary:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.1));
+      }
+      .start-btn-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .start-btn-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .start-btn-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .start-btn-chip {
+        min-width: 38px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-align: center;
       }
 
       /* Loading Overlay */
@@ -295,13 +397,14 @@
       /* macOS-style Dock */
       #dock {
         position: fixed;
-        bottom: 16px;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
         display: flex;
-        align-items: flex-end;
+        flex-direction: column;
+        align-items: center;
         gap: 4px;
-        padding: 8px 12px;
+        padding: 12px 8px;
         background: rgba(30, 30, 30, 0.75);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 18px;
@@ -315,6 +418,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
         cursor: pointer;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
@@ -357,9 +461,9 @@
 
       .dock-label {
         position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-8px);
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%) translateX(-8px);
         padding: 6px 12px;
         background: rgba(0, 0, 0, 0.85);
         color: #fff;
@@ -376,17 +480,17 @@
       .dock-label::after {
         content: "";
         position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
         border: 6px solid transparent;
-        border-top-color: rgba(0, 0, 0, 0.85);
+        border-left-color: rgba(0, 0, 0, 0.85);
       }
 
       .dock-item:hover .dock-label {
         opacity: 1;
         visibility: visible;
-        transform: translateX(-50%) translateY(-12px);
+        transform: translateY(-50%) translateX(-12px);
       }
 
       .dock-indicator {
@@ -402,6 +506,45 @@
       .dock-item.active .dock-indicator {
         opacity: 1;
       }
+
+      /* Mobile Waypoint Select */
+      #waypoint-select {
+        display: none;
+        margin-left: auto;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        font-family: inherit;
+        cursor: pointer;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 32px;
+      }
+      #waypoint-select:focus {
+        border-color: rgba(59, 130, 246, 0.6);
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+      #waypoint-select option {
+        background: #1a1a1a;
+        color: #fff;
+      }
+
+      /* Mobile: hide dock, show select */
+      @media (max-width: 768px) {
+        #dock {
+          display: none !important;
+        }
+        #waypoint-select.visible {
+          display: block;
+        }
+      }
     </style>
 
     <!-- Importmap so this works by just opening in a local server -->
@@ -415,10 +558,7 @@
     </script>
   </head>
   <body>
-    <div
-      id="app"
-      data-glb-url="https://pub-b5377789238f40a490cbede5403fae02.r2.dev/1.glb"
-    ></div>
+    <div id="app" data-glb-url="https://pub-b5377789238f40a490cbede5403fae02.r2.dev/1.glb" data-floorplan-glb-url="https://pub-b5377789238f40a490cbede5403fae02.r2.dev/2.glb"></div>
 
     <!-- Header Bar -->
     <header id="header">
@@ -428,7 +568,32 @@
         <span></span>
       </button>
       <div id="header-title">2 Armagh</div>
+      <select id="waypoint-select" aria-label="Select waypoint"></select>
     </header>
+
+    <div id="start-screen">
+      <div class="start-card">
+        <div class="start-kicker">Choose a view</div>
+        <div class="start-title">2 Armagh</div>
+        <div class="start-subtitle">Select a view to load.</div>
+        <div class="start-actions">
+          <button id="start-tour" class="start-btn primary" type="button">
+            <span class="start-btn-text">
+              <span class="start-btn-title">3D Model</span>
+              <span class="start-btn-sub">Guided camera waypoints</span>
+            </span>
+            <span class="start-btn-chip">3D</span>
+          </button>
+          <button id="start-floorplan" class="start-btn" type="button">
+            <span class="start-btn-text">
+              <span class="start-btn-title">First Floor</span>
+              <span class="start-btn-sub">Top-down floorplan</span>
+            </span>
+            <span class="start-btn-chip">2D</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Sidebar Overlay -->
     <div id="sidebar-overlay"></div>
@@ -441,8 +606,9 @@
       </div>
       <div id="sidebar-content">
         <div class="sidebar-section">
-          <div class="sidebar-section-title">Waypoints</div>
-          <div id="sidebar-waypoints"></div>
+          <div class="sidebar-section-title">Views</div>
+          <button id="tour-link" class="sidebar-link" type="button">3D View</button>
+          <button id="floorplan-link" class="sidebar-link" type="button">Floorplan: Ground Floor</button>
         </div>
       </div>
       <div id="sidebar-footer">
@@ -463,7 +629,7 @@
     <div id="dock"></div>
 
     <!-- Loading Overlay -->
-    <div id="loading">
+    <div id="loading" class="hidden">
       <div class="loader">
         <div class="loader-ring"></div>
         <div class="loader-ring"></div>
@@ -486,8 +652,10 @@
 
       // ====== Config ======
       const DEFAULT_GLB_URL = "./1.glb"; // keep GLB next to this HTML, or override below
+      const DEFAULT_FLOORPLAN_GLB_URL = "./2.glb";
       const glbUrlParam = new URLSearchParams(window.location.search).get("glb");
       const GLB_URL = glbUrlParam || container.dataset.glbUrl || DEFAULT_GLB_URL;
+      const FLOORPLAN_GLB_URL = container.dataset.floorplanGlbUrl || DEFAULT_FLOORPLAN_GLB_URL;
       const WAYPOINT_PREFIX = "WP_"; // change if your nodes use another prefix
       const FADE_MS = 320;
       const LOOK_AHEAD = 2.0; // meters in front of waypoint to aim controls target
@@ -537,7 +705,11 @@
       // ====== UI + Fade helpers ======
       const fadeEl = document.getElementById("fade");
       const toastEl = document.getElementById("toast");
-      const sidebarWaypointsContainer = document.getElementById("sidebar-waypoints");
+      const startScreen = document.getElementById("start-screen");
+      const startTourBtn = document.getElementById("start-tour");
+      const startFloorplanBtn = document.getElementById("start-floorplan");
+      const tourLink = document.getElementById("tour-link");
+      const floorplanLink = document.getElementById("floorplan-link");
       const hamburgerBtn = document.getElementById("hamburger");
       const sidebar = document.getElementById("sidebar");
       const sidebarOverlay = document.getElementById("sidebar-overlay");
@@ -545,9 +717,16 @@
       const loadingBar = document.getElementById("loading-bar");
       const loadingText = document.getElementById("loading-text");
       const dock = document.getElementById("dock");
+      const waypointSelect = document.getElementById("waypoint-select");
+
+      dock.style.display = "none";
 
       function hideLoading() {
         loadingEl.classList.add("hidden");
+      }
+
+      function hideStartScreen() {
+        startScreen.classList.add("hidden");
       }
 
       function updateLoadingProgress(percent) {
@@ -587,150 +766,421 @@
         await sleep(FADE_MS);
       }
 
-      // ====== Load GLB ======
+      // ====== Model state + loaders ======
       const loader = new GLTFLoader();
+      const models = {
+        tour: { root: null, waypoints: [], size: null, center: null, diag: null },
+        floorplan: { root: null, waypoints: [], size: null, center: null, diag: null },
+      };
       let waypoints = []; // { name, obj3d }
+      let waypointMarkers = [];
+      let waypointSpriteMaterial = null;
+      let isFloorplanView = false;
+      let isLoadingModel = false;
+      let dockEffectsAttached = false;
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let hoveredMarker = null;
 
-      loader.load(
-        GLB_URL,
-        (gltf) => {
-          const root = gltf.scene || gltf.scenes[0];
-          scene.add(root);
+      function showLoading(message) {
+        loadingEl.classList.remove("hidden");
+        loadingText.textContent = message;
+        updateLoadingProgress(0);
+      }
 
-          // Hide loading overlay
-          setTimeout(hideLoading, 200);
+      function clearWaypointMarkers() {
+        waypointMarkers.forEach((marker) => scene.remove(marker));
+        waypointMarkers = [];
+        hoveredMarker = null;
+        renderer.domElement.style.cursor = "";
+      }
 
-          // Compute model bounds to set sane camera limits
-          const box = new THREE.Box3().setFromObject(root);
-          const size = box.getSize(new THREE.Vector3());
-          const center = box.getCenter(new THREE.Vector3());
-          const diag = size.length();
+      function collectWaypoints(root) {
+        const collected = [];
+        root.traverse((obj) => {
+          if (!obj.name) return;
+          if (obj.name.startsWith(WAYPOINT_PREFIX)) {
+            collected.push({ name: obj.name, obj3d: obj });
+          }
+        });
 
-          // Tweak camera distances based on model scale
+        collected.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
+
+        if (collected.length === 0) {
+          // Fallback: use any empties named "Waypoint" etc.
+          root.traverse((obj) => {
+            if (!obj.name) return;
+            const n = obj.name.toLowerCase();
+            if (n.includes("waypoint") || n.startsWith("wp")) collected.push({ name: obj.name, obj3d: obj });
+          });
+          collected.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
+        }
+
+        return collected;
+      }
+
+      function setActiveWaypoint(name) {
+        dock.querySelectorAll(".dock-item").forEach((b) => b.classList.toggle("active", b.dataset.name === name));
+        waypointSelect.value = name;
+      }
+
+      function ensureDockEffects() {
+        if (dockEffectsAttached) return;
+        dockEffectsAttached = true;
+
+        dock.addEventListener("mousemove", (e) => {
+          const dockItems = dock.querySelectorAll(".dock-item");
+          dockItems.forEach((item) => {
+            const rect = item.getBoundingClientRect();
+            const itemCenterY = rect.top + rect.height / 2;
+            const distance = Math.abs(e.clientY - itemCenterY);
+            const maxDistance = 100;
+            const scale = Math.max(1, 1.4 - (distance / maxDistance) * 0.4);
+            const translateX = (scale - 1) * -20;
+            item.style.transform = `scale(${scale}) translateX(${translateX}px)`;
+          });
+        });
+
+        dock.addEventListener("mouseleave", () => {
+          const dockItems = dock.querySelectorAll(".dock-item");
+          dockItems.forEach((item) => {
+            item.style.transform = "scale(1) translateX(0)";
+          });
+        });
+      }
+
+      function buildDockItems() {
+        dock.innerHTML = "";
+
+        if (!waypoints.length) {
+          dock.style.display = "none";
+          return;
+        }
+
+        dock.style.display = "";
+        ensureDockEffects();
+
+        waypoints.forEach((wp, index) => {
+          const dockItem = document.createElement("div");
+          dockItem.className = "dock-item";
+          dockItem.dataset.name = wp.name;
+
+          const dockIcon = document.createElement("div");
+          dockIcon.className = "dock-icon";
+          dockIcon.textContent = (index + 1).toString();
+
+          const dockLabel = document.createElement("div");
+          dockLabel.className = "dock-label";
+          dockLabel.textContent = wp.name;
+
+          const dockIndicator = document.createElement("div");
+          dockIndicator.className = "dock-indicator";
+
+          dockItem.appendChild(dockLabel);
+          dockItem.appendChild(dockIcon);
+          dockItem.appendChild(dockIndicator);
+
+          dockItem.addEventListener("click", () => {
+            setActiveWaypoint(wp.name);
+            gotoWaypointByName(wp.name);
+          });
+
+          dock.appendChild(dockItem);
+        });
+      }
+
+      function buildWaypointSelect() {
+        waypointSelect.innerHTML = "";
+
+        if (!waypoints.length || isFloorplanView) {
+          waypointSelect.classList.remove("visible");
+          return;
+        }
+
+        waypointSelect.classList.add("visible");
+
+        waypoints.forEach((wp, index) => {
+          const option = document.createElement("option");
+          option.value = wp.name;
+          option.textContent = `${index + 1}. ${wp.name}`;
+          waypointSelect.appendChild(option);
+        });
+      }
+
+      waypointSelect.addEventListener("change", (e) => {
+        const name = e.target.value;
+        setActiveWaypoint(name);
+        gotoWaypointByName(name);
+      });
+
+      function getWaypointSpriteMaterial() {
+        if (waypointSpriteMaterial) return waypointSpriteMaterial;
+        const canvas = document.createElement("canvas");
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+        ctx.lineWidth = 6;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(14, 14);
+        ctx.lineTo(50, 50);
+        ctx.moveTo(50, 14);
+        ctx.lineTo(14, 50);
+        ctx.stroke();
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        waypointSpriteMaterial = new THREE.SpriteMaterial({
+          map: texture,
+          transparent: true,
+          depthTest: false,
+          depthWrite: false,
+        });
+        return waypointSpriteMaterial;
+      }
+
+      function showWaypointMarkers(size) {
+        clearWaypointMarkers();
+
+        if (!waypoints.length) return;
+
+        const diag = size.length();
+        const markerScale = Math.max(0.2, diag * 0.01);
+        const markerOffset = Math.max(0.02, diag * 0.002);
+        const markerPos = new THREE.Vector3();
+        const material = getWaypointSpriteMaterial();
+
+        waypoints.forEach((wp) => {
+          wp.obj3d.getWorldPosition(markerPos);
+          const marker = new THREE.Sprite(material);
+          marker.scale.set(markerScale, markerScale, markerScale);
+          marker.position.copy(markerPos);
+          marker.position.y += markerOffset;
+          marker.renderOrder = 2;
+          marker.userData.waypointName = wp.name;
+          scene.add(marker);
+          waypointMarkers.push(marker);
+        });
+      }
+
+      function getMarkerHit(event) {
+        if (!waypointMarkers.length) return null;
+        const rect = renderer.domElement.getBoundingClientRect();
+        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(waypointMarkers, false);
+        return hits.length ? hits[0].object : null;
+      }
+
+      function setFloorplanView(center, size) {
+        const axes = [
+          { length: size.x, dir: new THREE.Vector3(1, 0, 0) },
+          { length: size.y, dir: new THREE.Vector3(0, 1, 0) },
+          { length: size.z, dir: new THREE.Vector3(0, 0, 1) },
+        ];
+        axes.sort((a, b) => a.length - b.length);
+
+        const viewAxis = axes[0].dir;
+        const horizontalMax = Math.max(axes[1].length, axes[2].length);
+        const distance = Math.max(1, horizontalMax * 0.75);
+        const position = center.clone().addScaledVector(viewAxis, distance);
+
+        const up = Math.abs(viewAxis.y) > 0.9 ? new THREE.Vector3(0, 0, 1) : new THREE.Vector3(0, 1, 0);
+        camera.position.copy(position);
+        camera.up.copy(up);
+        controls.target.copy(center);
+        camera.lookAt(center);
+        controls.update();
+      }
+
+      async function applyTourView(targetWaypointName, center, diag) {
+        const fallbackDiag = diag || 1;
+        buildDockItems();
+        buildWaypointSelect();
+
+        if (targetWaypointName) {
+          const target = findWaypointByName(targetWaypointName);
+          if (target) {
+            setActiveWaypoint(target.name);
+            await gotoWaypoint(target, /*skipFade=*/ true);
+            return;
+          }
+          toast(`Waypoint "${targetWaypointName}" not found`, 1800);
+        }
+
+        if (waypoints.length) {
+          setActiveWaypoint(waypoints[0].name);
+          await gotoWaypoint(waypoints[0], /*skipFade=*/ true);
+          return;
+        }
+
+        controls.target.copy(center);
+        camera.position.copy(center).add(new THREE.Vector3(0, fallbackDiag * 0.15 + 1.6, fallbackDiag * 0.35 + 4));
+        controls.update();
+      }
+
+      async function loadModel(url, mode, targetWaypointName = null) {
+        if (isLoadingModel) return;
+        const wantsFloorplan = mode === "floorplan";
+        const modelState = wantsFloorplan ? models.floorplan : models.tour;
+        const otherState = wantsFloorplan ? models.tour : models.floorplan;
+
+        isFloorplanView = wantsFloorplan;
+        floorplanLink.classList.toggle("active", isFloorplanView);
+        tourLink.classList.toggle("active", !isFloorplanView);
+        controls.enablePan = true;
+        controls.enableZoom = true;
+        controls.enableRotate = true;
+        controls.screenSpacePanning = isFloorplanView;
+        if (!isFloorplanView) renderer.domElement.style.cursor = "";
+
+        clearWaypointMarkers();
+        waypoints = modelState.waypoints;
+        dock.innerHTML = "";
+        dock.style.display = isFloorplanView ? "none" : "";
+        waypointSelect.innerHTML = "";
+        waypointSelect.classList.remove("visible");
+
+        if (modelState.root) {
+          isLoadingModel = true;
+          await fadeTo(1);
+          if (otherState.root) otherState.root.visible = false;
+          modelState.root.visible = true;
+
+          const diag = modelState.diag || 1;
           controls.maxDistance = Math.max(10, diag * 1.5);
           controls.minDistance = Math.max(0.1, diag * 0.002);
 
-          // Gather waypoint nodes
-          root.traverse((obj) => {
-            if (!obj.name) return;
-            if (obj.name.startsWith(WAYPOINT_PREFIX)) {
-              waypoints.push({ name: obj.name, obj3d: obj });
-            }
-          });
-
-          waypoints.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
-
-          if (waypoints.length === 0) {
-            // Fallback: use any empties named "Waypoint" etc.
-            root.traverse((obj) => {
-              if (!obj.name) return;
-              const n = obj.name.toLowerCase();
-              if (n.includes("waypoint") || n.startsWith("wp")) waypoints.push({ name: obj.name, obj3d: obj });
-            });
-            waypoints.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
-          }
-
-          // Create waypoint buttons in sidebar
-          sidebarWaypointsContainer.innerHTML = "";
-          dock.innerHTML = "";
-
-          if (waypoints.length) {
-            waypoints.forEach((wp, index) => {
-              // Sidebar button
-              const sidebarBtn = document.createElement("button");
-              sidebarBtn.className = "sidebar-wp-btn";
-              sidebarBtn.textContent = wp.name.replace(WAYPOINT_PREFIX, "");
-              sidebarBtn.dataset.name = wp.name;
-              sidebarBtn.addEventListener("click", () => {
-                setActiveWaypoint(wp.name);
-                gotoWaypointByName(wp.name);
-                closeSidebar();
-              });
-              sidebarWaypointsContainer.appendChild(sidebarBtn);
-
-              // Dock item
-              const dockItem = document.createElement("div");
-              dockItem.className = "dock-item";
-              dockItem.dataset.name = wp.name;
-
-              const dockIcon = document.createElement("div");
-              dockIcon.className = "dock-icon";
-              dockIcon.textContent = (index + 1).toString();
-
-              const dockLabel = document.createElement("div");
-              dockLabel.className = "dock-label";
-              dockLabel.textContent = wp.name.replace(WAYPOINT_PREFIX, "");
-
-              const dockIndicator = document.createElement("div");
-              dockIndicator.className = "dock-indicator";
-
-              dockItem.appendChild(dockLabel);
-              dockItem.appendChild(dockIcon);
-              dockItem.appendChild(dockIndicator);
-
-              dockItem.addEventListener("click", () => {
-                setActiveWaypoint(wp.name);
-                gotoWaypointByName(wp.name);
-              });
-
-              dock.appendChild(dockItem);
-            });
-
-            // Dock hover magnification effect
-            dock.addEventListener("mousemove", (e) => {
-              const dockItems = dock.querySelectorAll(".dock-item");
-              dockItems.forEach((item) => {
-                const rect = item.getBoundingClientRect();
-                const itemCenterX = rect.left + rect.width / 2;
-                const distance = Math.abs(e.clientX - itemCenterX);
-                const maxDistance = 100;
-                const scale = Math.max(1, 1.4 - (distance / maxDistance) * 0.4);
-                const translateY = (scale - 1) * -20;
-                item.style.transform = `scale(${scale}) translateY(${translateY}px)`;
-              });
-            });
-
-            dock.addEventListener("mouseleave", () => {
-              const dockItems = dock.querySelectorAll(".dock-item");
-              dockItems.forEach((item) => {
-                item.style.transform = "scale(1) translateY(0)";
-              });
-            });
-
-            toast(`Loaded ${waypoints.length} waypoint(s)`);
+          if (isFloorplanView) {
+            showWaypointMarkers(modelState.size);
+            setFloorplanView(modelState.center, modelState.size);
           } else {
-            sidebarWaypointsContainer.innerHTML = '<p style="color: rgba(255,255,255,0.5); font-size: 13px; margin: 0;">No waypoints found (expected names like WP_001)</p>';
-            toast("No waypoint nodes found (expected names like WP_001)");
+            await applyTourView(targetWaypointName, modelState.center, modelState.diag);
           }
 
-          // Helper to set active state
-          function setActiveWaypoint(name) {
-            document.querySelectorAll(".sidebar-wp-btn").forEach((b) => b.classList.toggle("active", b.dataset.name === name));
-            document.querySelectorAll(".dock-item").forEach((b) => b.classList.toggle("active", b.dataset.name === name));
-          }
-
-          // Start view: first waypoint if present, else frame model
-          if (waypoints.length) {
-            setActiveWaypoint(waypoints[0].name);
-            gotoWaypoint(waypoints[0], /*skipFade=*/ true);
-          } else {
-            controls.target.copy(center);
-            camera.position.copy(center).add(new THREE.Vector3(0, diag * 0.15 + 1.6, diag * 0.35 + 4));
-            controls.update();
-          }
-        },
-        (xhr) => {
-          if (xhr.lengthComputable) {
-            const percent = Math.round((xhr.loaded / xhr.total) * 100);
-            updateLoadingProgress(percent);
-          }
-        },
-        (err) => {
-          hideLoading();
-          console.error(err);
-          toast("Failed to load GLB. Run via a local server (not file://).", 2500);
+          await fadeTo(0);
+          isLoadingModel = false;
+          return;
         }
-      );
+
+        isLoadingModel = true;
+        showLoading(isFloorplanView ? "Loading floorplan..." : "Loading 3D model...");
+        await fadeTo(1);
+        if (otherState.root) otherState.root.visible = false;
+
+        loader.load(
+          url,
+          async (gltf) => {
+            const root = gltf.scene || gltf.scenes[0];
+            modelState.root = root;
+            modelState.root.visible = true;
+            scene.add(root);
+            root.updateWorldMatrix(true, true);
+
+            // Compute model bounds to set sane camera limits
+            const box = new THREE.Box3().setFromObject(root);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            const diag = size.length();
+            modelState.size = size;
+            modelState.center = center;
+            modelState.diag = diag;
+
+            // Tweak camera distances based on model scale
+            controls.maxDistance = Math.max(10, diag * 1.5);
+            controls.minDistance = Math.max(0.1, diag * 0.002);
+
+            modelState.waypoints = collectWaypoints(root);
+            waypoints = modelState.waypoints;
+
+            if (isFloorplanView) {
+              showWaypointMarkers(size);
+              setFloorplanView(center, size);
+            } else {
+              await applyTourView(targetWaypointName, center, diag);
+            }
+
+            if (waypoints.length) {
+              toast(`Loaded ${waypoints.length} waypoint(s)`);
+            } else {
+              toast("No waypoint nodes found (expected names like WP_001)");
+            }
+
+            setTimeout(hideLoading, 200);
+            await fadeTo(0);
+            isLoadingModel = false;
+          },
+          (xhr) => {
+            if (xhr.lengthComputable) {
+              const percent = Math.round((xhr.loaded / xhr.total) * 100);
+              updateLoadingProgress(percent);
+            }
+          },
+          async (err) => {
+            isLoadingModel = false;
+            hideLoading();
+            console.error(err);
+            await fadeTo(0);
+            toast("Failed to load GLB. Run via a local server (not file://).", 2500);
+          }
+        );
+      }
+
+      function selectView(mode, targetWaypointName = null) {
+        if (isLoadingModel) return;
+        const wantsFloorplan = mode === "floorplan";
+        const modelState = wantsFloorplan ? models.floorplan : models.tour;
+        if (modelState.root && isFloorplanView === wantsFloorplan && !targetWaypointName) {
+          closeSidebar();
+          return;
+        }
+
+        hideStartScreen();
+        closeSidebar();
+        loadModel(wantsFloorplan ? FLOORPLAN_GLB_URL : GLB_URL, mode, targetWaypointName);
+      }
+
+      floorplanLink.addEventListener("click", () => {
+        selectView("floorplan");
+      });
+
+      tourLink.addEventListener("click", () => {
+        selectView("tour");
+      });
+
+      startFloorplanBtn.addEventListener("click", () => {
+        selectView("floorplan");
+      });
+
+      startTourBtn.addEventListener("click", () => {
+        selectView("tour");
+      });
+
+      renderer.domElement.addEventListener("pointermove", (event) => {
+        if (!isFloorplanView) {
+          if (hoveredMarker) {
+            hoveredMarker = null;
+            renderer.domElement.style.cursor = "";
+          }
+          return;
+        }
+
+        const hit = getMarkerHit(event);
+        if (hit !== hoveredMarker) {
+          hoveredMarker = hit;
+          renderer.domElement.style.cursor = hit ? "pointer" : "";
+        }
+      });
+
+      renderer.domElement.addEventListener("click", (event) => {
+        if (!isFloorplanView || isLoadingModel) return;
+        const hit = getMarkerHit(event);
+        if (hit?.userData?.waypointName) {
+          selectView("tour", hit.userData.waypointName);
+        }
+      });
 
       // ====== Waypoint teleport ======
       const tmpPos = new THREE.Vector3();
@@ -781,6 +1231,7 @@
 
       // Keyboard shortcuts 1-9
       window.addEventListener("keydown", (e) => {
+        if (isFloorplanView || isLoadingModel) return;
         if (e.repeat) return;
         const n = parseInt(e.key, 10);
         if (!Number.isFinite(n)) return;
@@ -788,8 +1239,7 @@
         const idx = n - 1;
         if (idx < waypoints.length) {
           const wpName = waypoints[idx].name;
-          document.querySelectorAll(".sidebar-wp-btn").forEach((b) => b.classList.toggle("active", b.dataset.name === wpName));
-          document.querySelectorAll(".dock-item").forEach((b) => b.classList.toggle("active", b.dataset.name === wpName));
+          setActiveWaypoint(wpName);
           gotoWaypoint(waypoints[idx]);
         }
       });
