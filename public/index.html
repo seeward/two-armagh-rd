@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2 Armagh</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #111;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+
+      /* Header Bar */
+      #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        background: rgba(20, 20, 20, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Hamburger Button */
+      #hamburger {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        margin-right: 16px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+      }
+      #hamburger:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      #hamburger span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: #fff;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+      #hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      #hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      #hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+
+      /* Logo/Title */
+      #header-title {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* Sidebar Menu */
+      #sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 150;
+      }
+      #sidebar-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        max-width: 80vw;
+        background: rgba(25, 25, 25, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 200;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+      }
+      #sidebar.open {
+        transform: translateX(0);
+      }
+
+      #sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      #sidebar-header h2 {
+        margin: 0;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      #sidebar-header p {
+        margin: 8px 0 0;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+      }
+
+      #sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 0;
+      }
+
+      .sidebar-section {
+        padding: 0 20px;
+        margin-bottom: 24px;
+      }
+      .sidebar-section-title {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+      }
+
+      .sidebar-wp-btn {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        margin-bottom: 4px;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .sidebar-wp-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .sidebar-wp-btn.active {
+        background: rgba(59, 130, 246, 0.3);
+        color: #60a5fa;
+      }
+
+      #sidebar-footer {
+        padding: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      #hint {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+      }
+
+      #fade {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 300ms ease;
+        z-index: 50;
+      }
+      #toast {
+        position: fixed;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        font-size: 13px;
+        opacity: 0;
+        transition: opacity 200ms ease;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 300;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+      a,
+      a:visited {
+        color: #9ad;
+      }
+
+      /* Loading Overlay */
+      #loading {
+        position: fixed;
+        inset: 0;
+        background: #111;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #loading.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader {
+        width: 56px;
+        height: 56px;
+        position: relative;
+      }
+
+      .loader-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #3b82f6;
+        animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      }
+      .loader-ring:nth-child(2) {
+        inset: 6px;
+        border-top-color: #60a5fa;
+        animation-delay: -0.15s;
+      }
+      .loader-ring:nth-child(3) {
+        inset: 12px;
+        border-top-color: #93c5fd;
+        animation-delay: -0.3s;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #loading-text {
+        margin-top: 24px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      #loading-progress {
+        margin-top: 16px;
+        width: 200px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      #loading-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+      }
+
+      /* macOS-style Dock */
+      #dock {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        padding: 8px 12px;
+        background: rgba(30, 30, 30, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 100;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+
+      .dock-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .dock-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(145deg, #4a5568, #2d3748);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dock-icon::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
+        border-radius: 12px 12px 0 0;
+      }
+
+      .dock-item:hover .dock-icon {
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+
+      .dock-item.active .dock-icon {
+        background: linear-gradient(145deg, #3b82f6, #2563eb);
+      }
+
+      .dock-label {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-8px);
+        padding: 6px 12px;
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 6px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.15s ease;
+        pointer-events: none;
+      }
+
+      .dock-label::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.85);
+      }
+
+      .dock-item:hover .dock-label {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-12px);
+      }
+
+      .dock-indicator {
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        border-radius: 50%;
+        margin-top: 4px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .dock-item.active .dock-indicator {
+        opacity: 1;
+      }
+    </style>
+
+    <!-- Importmap so this works by just opening in a local server -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      id="app"
+      data-glb-url="https://pub-b5377789238f40a490cbede5403fae02.r2.dev/1.glb"
+    ></div>
+
+    <!-- Header Bar -->
+    <header id="header">
+      <button id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div id="header-title">2 Armagh</div>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay"></div>
+
+    <!-- Sidebar Menu -->
+    <nav id="sidebar">
+      <div id="sidebar-header">
+        <h2>2 Armagh</h2>
+        <p>3D Property Viewer</p>
+      </div>
+      <div id="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Waypoints</div>
+          <div id="sidebar-waypoints"></div>
+        </div>
+      </div>
+      <div id="sidebar-footer">
+        <div id="hint">
+          <strong>Controls:</strong><br />
+          Drag to look around<br />
+          Scroll/pinch to zoom<br />
+          Right-drag to pan<br />
+          Keys 1–9 to jump
+        </div>
+      </div>
+    </nav>
+
+    <div id="fade"></div>
+    <div id="toast"></div>
+
+    <!-- macOS-style Dock -->
+    <div id="dock"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading">
+      <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+      </div>
+      <div id="loading-text">Loading 3D model...</div>
+      <div id="loading-progress">
+        <div id="loading-bar"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+      import { EXRLoader } from "three/addons/loaders/EXRLoader.js";
+      import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+      const container = document.getElementById("app");
+
+      // ====== Config ======
+      const DEFAULT_GLB_URL = "./1.glb"; // keep GLB next to this HTML, or override below
+      const glbUrlParam = new URLSearchParams(window.location.search).get("glb");
+      const GLB_URL = glbUrlParam || container.dataset.glbUrl || DEFAULT_GLB_URL;
+      const WAYPOINT_PREFIX = "WP_"; // change if your nodes use another prefix
+      const FADE_MS = 320;
+      const LOOK_AHEAD = 2.0; // meters in front of waypoint to aim controls target
+
+      // ====== Basic scene ======
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      container.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x111111);
+
+      // Nice neutral IBL environment (doesn't override your materials; helps lighting)
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+
+      // Load EXR as world background
+      const exrLoader = new EXRLoader();
+      exrLoader.load("./bg.exr", (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = texture;
+        scene.environment = texture;
+      });
+
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 5000);
+      camera.position.set(0, 1.6, 4);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.screenSpacePanning = false;
+      controls.target.set(0, 1.4, 0);
+
+      // Reasonable defaults; we'll update after we know your model size
+      controls.minDistance = 0.2;
+      controls.maxDistance = 200;
+
+      // Subtle lights to help if model is dark (kept low to avoid washing out baked/accurate materials)
+      const hemi = new THREE.HemisphereLight(0xffffff, 0x222233, 0.6);
+      scene.add(hemi);
+      const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+      dir.position.set(10, 20, 10);
+      scene.add(dir);
+
+      // ====== UI + Fade helpers ======
+      const fadeEl = document.getElementById("fade");
+      const toastEl = document.getElementById("toast");
+      const sidebarWaypointsContainer = document.getElementById("sidebar-waypoints");
+      const hamburgerBtn = document.getElementById("hamburger");
+      const sidebar = document.getElementById("sidebar");
+      const sidebarOverlay = document.getElementById("sidebar-overlay");
+      const loadingEl = document.getElementById("loading");
+      const loadingBar = document.getElementById("loading-bar");
+      const loadingText = document.getElementById("loading-text");
+      const dock = document.getElementById("dock");
+
+      function hideLoading() {
+        loadingEl.classList.add("hidden");
+      }
+
+      function updateLoadingProgress(percent) {
+        loadingBar.style.width = percent + "%";
+        if (percent >= 100) {
+          loadingText.textContent = "Preparing scene...";
+        }
+      }
+
+      // Sidebar toggle
+      function toggleSidebar() {
+        const isOpen = sidebar.classList.toggle("open");
+        sidebarOverlay.classList.toggle("visible", isOpen);
+        hamburgerBtn.classList.toggle("active", isOpen);
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove("open");
+        sidebarOverlay.classList.remove("visible");
+        hamburgerBtn.classList.remove("active");
+      }
+
+      hamburgerBtn.addEventListener("click", toggleSidebar);
+      sidebarOverlay.addEventListener("click", closeSidebar);
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      function toast(msg, ms = 1200) {
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        setTimeout(() => toastEl.classList.remove("show"), ms);
+      }
+
+      async function fadeTo(opacity) {
+        fadeEl.style.transition = `opacity ${FADE_MS}ms ease`;
+        fadeEl.style.opacity = String(opacity);
+        await sleep(FADE_MS);
+      }
+
+      // ====== Load GLB ======
+      const loader = new GLTFLoader();
+      let waypoints = []; // { name, obj3d }
+
+      loader.load(
+        GLB_URL,
+        (gltf) => {
+          const root = gltf.scene || gltf.scenes[0];
+          scene.add(root);
+
+          // Hide loading overlay
+          setTimeout(hideLoading, 200);
+
+          // Compute model bounds to set sane camera limits
+          const box = new THREE.Box3().setFromObject(root);
+          const size = box.getSize(new THREE.Vector3());
+          const center = box.getCenter(new THREE.Vector3());
+          const diag = size.length();
+
+          // Tweak camera distances based on model scale
+          controls.maxDistance = Math.max(10, diag * 1.5);
+          controls.minDistance = Math.max(0.1, diag * 0.002);
+
+          // Gather waypoint nodes
+          root.traverse((obj) => {
+            if (!obj.name) return;
+            if (obj.name.startsWith(WAYPOINT_PREFIX)) {
+              waypoints.push({ name: obj.name, obj3d: obj });
+            }
+          });
+
+          waypoints.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
+
+          if (waypoints.length === 0) {
+            // Fallback: use any empties named "Waypoint" etc.
+            root.traverse((obj) => {
+              if (!obj.name) return;
+              const n = obj.name.toLowerCase();
+              if (n.includes("waypoint") || n.startsWith("wp")) waypoints.push({ name: obj.name, obj3d: obj });
+            });
+            waypoints.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }));
+          }
+
+          // Create waypoint buttons in sidebar
+          sidebarWaypointsContainer.innerHTML = "";
+          dock.innerHTML = "";
+
+          if (waypoints.length) {
+            waypoints.forEach((wp, index) => {
+              // Sidebar button
+              const sidebarBtn = document.createElement("button");
+              sidebarBtn.className = "sidebar-wp-btn";
+              sidebarBtn.textContent = wp.name.replace(WAYPOINT_PREFIX, "");
+              sidebarBtn.dataset.name = wp.name;
+              sidebarBtn.addEventListener("click", () => {
+                setActiveWaypoint(wp.name);
+                gotoWaypointByName(wp.name);
+                closeSidebar();
+              });
+              sidebarWaypointsContainer.appendChild(sidebarBtn);
+
+              // Dock item
+              const dockItem = document.createElement("div");
+              dockItem.className = "dock-item";
+              dockItem.dataset.name = wp.name;
+
+              const dockIcon = document.createElement("div");
+              dockIcon.className = "dock-icon";
+              dockIcon.textContent = (index + 1).toString();
+
+              const dockLabel = document.createElement("div");
+              dockLabel.className = "dock-label";
+              dockLabel.textContent = wp.name.replace(WAYPOINT_PREFIX, "");
+
+              const dockIndicator = document.createElement("div");
+              dockIndicator.className = "dock-indicator";
+
+              dockItem.appendChild(dockLabel);
+              dockItem.appendChild(dockIcon);
+              dockItem.appendChild(dockIndicator);
+
+              dockItem.addEventListener("click", () => {
+                setActiveWaypoint(wp.name);
+                gotoWaypointByName(wp.name);
+              });
+
+              dock.appendChild(dockItem);
+            });
+
+            // Dock hover magnification effect
+            dock.addEventListener("mousemove", (e) => {
+              const dockItems = dock.querySelectorAll(".dock-item");
+              dockItems.forEach((item) => {
+                const rect = item.getBoundingClientRect();
+                const itemCenterX = rect.left + rect.width / 2;
+                const distance = Math.abs(e.clientX - itemCenterX);
+                const maxDistance = 100;
+                const scale = Math.max(1, 1.4 - (distance / maxDistance) * 0.4);
+                const translateY = (scale - 1) * -20;
+                item.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+              });
+            });
+
+            dock.addEventListener("mouseleave", () => {
+              const dockItems = dock.querySelectorAll(".dock-item");
+              dockItems.forEach((item) => {
+                item.style.transform = "scale(1) translateY(0)";
+              });
+            });
+
+            toast(`Loaded ${waypoints.length} waypoint(s)`);
+          } else {
+            sidebarWaypointsContainer.innerHTML = '<p style="color: rgba(255,255,255,0.5); font-size: 13px; margin: 0;">No waypoints found (expected names like WP_001)</p>';
+            toast("No waypoint nodes found (expected names like WP_001)");
+          }
+
+          // Helper to set active state
+          function setActiveWaypoint(name) {
+            document.querySelectorAll(".sidebar-wp-btn").forEach((b) => b.classList.toggle("active", b.dataset.name === name));
+            document.querySelectorAll(".dock-item").forEach((b) => b.classList.toggle("active", b.dataset.name === name));
+          }
+
+          // Start view: first waypoint if present, else frame model
+          if (waypoints.length) {
+            setActiveWaypoint(waypoints[0].name);
+            gotoWaypoint(waypoints[0], /*skipFade=*/ true);
+          } else {
+            controls.target.copy(center);
+            camera.position.copy(center).add(new THREE.Vector3(0, diag * 0.15 + 1.6, diag * 0.35 + 4));
+            controls.update();
+          }
+        },
+        (xhr) => {
+          if (xhr.lengthComputable) {
+            const percent = Math.round((xhr.loaded / xhr.total) * 100);
+            updateLoadingProgress(percent);
+          }
+        },
+        (err) => {
+          hideLoading();
+          console.error(err);
+          toast("Failed to load GLB. Run via a local server (not file://).", 2500);
+        }
+      );
+
+      // ====== Waypoint teleport ======
+      const tmpPos = new THREE.Vector3();
+      const tmpQuat = new THREE.Quaternion();
+      const tmpForward = new THREE.Vector3(0, 0, -1);
+      const tmpUp = new THREE.Vector3(0, 1, 0);
+
+      function findWaypointByName(name) {
+        return waypoints.find((w) => w.name === name);
+      }
+
+      async function gotoWaypointByName(name) {
+        const wp = findWaypointByName(name);
+        if (wp) await gotoWaypoint(wp);
+      }
+
+      async function gotoWaypoint(wp, skipFade = false) {
+        if (!wp?.obj3d) return;
+
+        if (!skipFade) await fadeTo(1);
+
+        // World transform of waypoint
+        wp.obj3d.getWorldPosition(tmpPos);
+        wp.obj3d.getWorldQuaternion(tmpQuat);
+
+        // Set camera to waypoint position/orientation
+        camera.position.copy(tmpPos);
+        camera.quaternion.copy(tmpQuat);
+
+        // Set orbit target to a point in front of the waypoint, so "look around" feels anchored
+        const ahead = tmpForward.clone().applyQuaternion(tmpQuat).multiplyScalar(LOOK_AHEAD);
+        const target = tmpPos.clone().add(ahead);
+
+        controls.target.copy(target);
+
+        // Keep camera 'up' stable-ish
+        camera.up.copy(tmpUp);
+        controls.update();
+
+        // Small epsilon nudge so OrbitControls doesn't think camera == target
+        if (camera.position.distanceTo(controls.target) < 0.05) {
+          camera.position.add(new THREE.Vector3(0, 0.05, 0.1));
+          controls.update();
+        }
+
+        if (!skipFade) await fadeTo(0);
+      }
+
+      // Keyboard shortcuts 1-9
+      window.addEventListener("keydown", (e) => {
+        if (e.repeat) return;
+        const n = parseInt(e.key, 10);
+        if (!Number.isFinite(n)) return;
+        if (n < 1 || n > 9) return;
+        const idx = n - 1;
+        if (idx < waypoints.length) {
+          const wpName = waypoints[idx].name;
+          document.querySelectorAll(".sidebar-wp-btn").forEach((b) => b.classList.toggle("active", b.dataset.name === wpName));
+          document.querySelectorAll(".dock-item").forEach((b) => b.classList.toggle("active", b.dataset.name === wpName));
+          gotoWaypoint(waypoints[idx]);
+        }
+      });
+
+      // Resize
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // Render loop
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Helpful hint for file://
+      if (location.protocol === "file:") {
+        toast("Tip: run with a local server (e.g. python -m http.server) for module imports.", 2500);
+      }
+    </script>
+  </body>
+</html>
