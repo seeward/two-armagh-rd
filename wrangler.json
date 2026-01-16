@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/schema.json",
+  "name": "two-armagh-rd",
+  "pages_build_output_dir": "."
+}
