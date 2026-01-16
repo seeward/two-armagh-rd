@@ -110,10 +110,9 @@ git tag -a v1.0.0 -m "Initial release - 3D Property Viewer"
 # 3. Push the tag
 git push origin v1.0.0
 
-# 4. Create the GitHub release
-gh release create v1.0.0 \
-  --title "Initial Release - v1.0.0" \
-  --notes "🎉 First release of the 2 Armagh 3D Property Viewer
+# 4. Create the GitHub release with notes
+cat << 'EOF' | gh release create v1.0.0 --title "Initial Release - v1.0.0" --notes-file -
+🎉 First release of the 2 Armagh 3D Property Viewer
 
 Features:
 - Interactive 3D property viewing
@@ -121,7 +120,8 @@ Features:
 - Mobile-friendly controls
 - macOS-style dock interface
 - Hamburger menu with waypoint list
-- EXR background support"
+- EXR background support
+EOF
 ```
 
 ## Hotfix Releases
